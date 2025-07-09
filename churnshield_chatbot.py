@@ -7,7 +7,7 @@ st.title("🤖 ChurnShield - Smart Churn Chatbot")
 
 # Load dataset
 try:
-    df = pd.read_csv(r"C:\Users\pande\OneDrive\Documents\Euro Truck Simulator 2\mod\churnshield dataset\chatbot\Churn_predictions.csv")
+    df = pd.read_csv("Churn_predictions.csv")
 except FileNotFoundError:
     st.error("❌ File 'churn_predictions.csv' not found!")
     st.stop()
