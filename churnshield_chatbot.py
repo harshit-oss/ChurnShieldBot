@@ -121,4 +121,7 @@ if query:
 
     else:
         st.warning("🤖 Sorry, I didn’t understand that. Try selecting a question above.")
+import streamlit as st
 
+st.sidebar.markdown("### 👨‍💻 Developed by Harshit Pandey")
+st.sidebar.markdown("[GitHub](https://github.com/yourprofile) | [LinkedIn](https://linkedin.com/in/yourprofile)")
