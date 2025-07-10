@@ -6,20 +6,35 @@ st.set_page_config(page_title="ChurnShield Chatbot", layout="centered")
 st.title("🤖 ChurnShield - Smart Churn Chatbot")
 
 # Load dataset
-try:
-    df = pd.read_csv("Churn_predictions.csv")
-except FileNotFoundError:
-    st.error("❌ File 'churn_predictions.csv' not found!")
-    st.stop()
+# Upload CSV file (optional)
+uploaded_file = st.file_uploader("📁 Upload your churn CSV file (optional)", type=["csv"])
 
-# Clean column names
-df.columns = df.columns.str.strip()
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    df.columns = df.columns.str.strip()
+    st.success("✅ File uploaded successfully!")
 
-# Fix missing Risk Level column if needed
+    # Check required columns
+    required_cols = ["Predicted Churn Risk", "Actual Churn(Yes/No)", "Risk Level"]
+    if not all(col in df.columns for col in required_cols):
+        st.error("❌ Uploaded file is missing required columns:\n\n- Predicted Churn Risk\n- Actual Churn(Yes/No)\n- Risk Level")
+        st.stop()
+
+else:
+    st.info("📌 No file uploaded. Using default Churn_predictions.csv")
+    try:
+        df = pd.read_csv("Churn_predictions.csv")
+        df.columns = df.columns.str.strip()
+    except FileNotFoundError:
+        st.error("❌ Default file 'Churn_predictions.csv' not found. Please upload a file.")
+        st.stop()
+
+# Ensure Risk Level exists
 if "Risk Level" not in df.columns or df["Risk Level"].isnull().all():
     df["Risk Level"] = df["Predicted Churn Risk"].apply(
         lambda x: "High" if x > 0.75 else "Medium" if x > 0.5 else "Low"
     )
+
 
 # Show sample questions as dropdown hint
 sample_questions = [
