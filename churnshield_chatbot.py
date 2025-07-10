@@ -4,6 +4,19 @@ import pandas as pd
 # Page setup
 st.set_page_config(page_title="ChurnShield Chatbot", layout="centered")
 st.title("🤖 ChurnShield - Smart Churn Chatbot")
+with st.expander("ℹ️ About this chatbot"):
+    st.markdown("""
+    **ChurnShield** is an intelligent customer churn analysis assistant.  
+    It allows users to:
+    - Upload or use a default churn prediction dataset
+    - Ask questions about customer churn trends
+    - Instantly visualize churn risk, customer behavior, and KPIs
+
+    Built for data analytics projects using **Streamlit + Pandas**.
+
+    **Use Case:** Telecom companies trying to reduce customer loss.
+    """)
+
 
 # Load dataset
 # Upload CSV file (optional)
@@ -136,3 +149,10 @@ if query:
 
     else:
         st.warning("🤖 Sorry, I didn’t understand that. Try selecting a question above.")
+# Footer
+st.markdown("---")
+st.markdown(
+    "<p style='text-align:center; color:gray;'>Made with ❤️ by <strong>Harshit Pandey</strong></p>",
+    unsafe_allow_html=True
+)
+
