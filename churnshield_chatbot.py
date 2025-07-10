@@ -4,10 +4,6 @@ import pandas as pd
 # Page setup
 st.set_page_config(page_title="ChurnShield Chatbot", layout="centered")
 st.title("🤖 ChurnShield - Smart Churn Chatbot")
-st.markdown("""
-Welcome to **ChurnShield** – a smart AI-driven app to help businesses prevent customer churn.
-Developed by *Harshit Pandey* as a data analytics + AI project.
-""")
 
 # Load dataset
 try:
