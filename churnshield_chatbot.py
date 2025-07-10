@@ -17,12 +17,24 @@ with st.expander("ℹ️ About this chatbot"):
 
 
 # Load dataset
-# Ask user whether to upload or use default
-data_option = st.radio("📂 Choose data input method:", ["Upload CSV manually", "Use default file"])
+# Radio to choose file input method
+data_option = st.radio("📂 Choose data input method:", ["Use default file", "Upload CSV manually"])
 
-if data_option == "Upload CSV manually":
+if data_option == "Use default file":
+    try:
+        df = pd.read_csv("Churn_predictions.csv")
+        df.columns = df.columns.str.strip()
+        st.success("✅ Loaded default file: Churn_predictions.csv")
+    except FileNotFoundError:
+        st.error("❌ Default file 'Churn_predictions.csv' not found.")
+        st.stop()
+
+elif data_option == "Upload CSV manually":
+    st.info("📝 Your file must contain the following columns exactly:")
+    st.code("Predicted Churn Risk, Actual Churn(Yes/No), Risk Level", language="markdown")
+
     uploaded_file = st.file_uploader("📁 Upload your churn CSV file", type=["csv"])
-    
+
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
         df.columns = df.columns.str.strip()
@@ -34,15 +46,6 @@ if data_option == "Upload CSV manually":
             st.stop()
     else:
         st.warning("⚠️ Please upload a file to continue.")
-        st.stop()
-
-elif data_option == "Use default file":
-    try:
-        df = pd.read_csv("Churn_predictions.csv")
-        df.columns = df.columns.str.strip()
-        st.success("✅ Loaded default file: Churn_predictions.csv")
-    except FileNotFoundError:
-        st.error("❌ Default file 'Churn_predictions.csv' not found. Please upload manually.")
         st.stop()
 
 
