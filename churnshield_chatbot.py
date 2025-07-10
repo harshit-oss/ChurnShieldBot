@@ -10,37 +10,41 @@ with st.expander("ℹ️ About this chatbot"):
     It allows users to:
     - Upload or use a default churn prediction dataset
     - Ask questions about customer churn trends
-    - Instantly visualize churn risk, customer behavior, and KPIs
-
-    Built for data analytics projects using **Streamlit + Pandas**.
+    - Instantly visualize churn risk, customer behavior, and KPIs.
 
     **Use Case:** Telecom companies trying to reduce customer loss.
     """)
 
 
 # Load dataset
-# Upload CSV file (optional)
-uploaded_file = st.file_uploader("📁 Upload your churn CSV file (optional)", type=["csv"])
+# Ask user whether to upload or use default
+data_option = st.radio("📂 Choose data input method:", ["Upload CSV manually", "Use default file"])
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    df.columns = df.columns.str.strip()
-    st.success("✅ File uploaded successfully!")
+if data_option == "Upload CSV manually":
+    uploaded_file = st.file_uploader("📁 Upload your churn CSV file", type=["csv"])
+    
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        df.columns = df.columns.str.strip()
+        st.success("✅ File uploaded successfully!")
 
-    # Check required columns
-    required_cols = ["Predicted Churn Risk", "Actual Churn(Yes/No)", "Risk Level"]
-    if not all(col in df.columns for col in required_cols):
-        st.error("❌ Uploaded file is missing required columns:\n\n- Predicted Churn Risk\n- Actual Churn(Yes/No)\n- Risk Level")
+        required_cols = ["Predicted Churn Risk", "Actual Churn(Yes/No)", "Risk Level"]
+        if not all(col in df.columns for col in required_cols):
+            st.error("❌ Uploaded file is missing required columns:\n\n- Predicted Churn Risk\n- Actual Churn(Yes/No)\n- Risk Level")
+            st.stop()
+    else:
+        st.warning("⚠️ Please upload a file to continue.")
         st.stop()
 
-else:
-    st.info("📌 No file uploaded. Using default Churn_predictions.csv")
+elif data_option == "Use default file":
     try:
         df = pd.read_csv("Churn_predictions.csv")
         df.columns = df.columns.str.strip()
+        st.success("✅ Loaded default file: Churn_predictions.csv")
     except FileNotFoundError:
-        st.error("❌ Default file 'Churn_predictions.csv' not found. Please upload a file.")
+        st.error("❌ Default file 'Churn_predictions.csv' not found. Please upload manually.")
         st.stop()
+
 
 # Ensure Risk Level exists
 if "Risk Level" not in df.columns or df["Risk Level"].isnull().all():
@@ -152,7 +156,7 @@ if query:
 # Footer
 st.markdown("---")
 st.markdown(
-    "<p style='text-align:center; color:gray;'>Made with ❤️ by <strong>Harshit Pandey</strong></p>",
+    "<p style='text-align:center; color:gray;'>Made by <strong>Harshit Pandey</strong></p>",
     unsafe_allow_html=True
 )
 
